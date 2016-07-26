@@ -1,5 +1,5 @@
 (function() {
-  var app = angular.module('teaStore', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
+  var app = angular.module('TeaStore', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
   app.controller('StoreController', function() {
     this.products = teas;
   });
