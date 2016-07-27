@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html ng-app="TeaStore">
   <head>
     <meta charset="UTF-8">
     <title>MEAN Tea Store</title>
@@ -9,33 +9,49 @@
     <link rel="stylesheet" href="style.css">
   </head>
 
-  <body ng-app="TeaStore">
-    <div class="teaStore" ng-controller="StoreController as store" ng-cloak="">
-      <md-content class="md-padding" flex layout-wrap layout-align="center" layout="row">
-        <div flex="30" ng-repeat="product in store.products">
-          <md-card class="tea-card">
-            <img ng-src="{{product.imageUrl}}" class="md-card-image" alt="Washed Out">
-            <md-card-title>
-              <md-card-title-text>
-                <span class="md-headline">{{product.name}}</span>
-              </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
-              <p><strong>Price:</strong> {{product.price}}</p>
-              <p><strong>Caffeine Scale:</strong> {{product.caffeineScale}}</p>
-              <p><strong>Ingredients:</strong> {{product.ingredients}}</p>
-              <p><strong>Rating:</strong> {{product.rating}}</p>
-              <p><strong>In Stock?</strong> {{product.inStock}}</p>
-              <ul>
-                <li>{{product.categories}}</li>
+  <body  ng-controller="StoreController as store" ng-cloak="">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2 class="md-flex">MEAN Tea Store</h2>
+      </div>
+    </md-toolbar>
+
+    <div layout="column" layout-align="end center" ng-controller="CategoryController">
+      <md-select placeholder="Search by category" ng-model="category" md-on-open="loadCategories()" style="min-width: 200px;">
+        <md-option ng-value="category" ng-repeat="category in categories">{{category.name}}</md-option>
+      </md-select>
+    </div>
+
+    <md-content class="md-padding" flex layout-wrap layout="row">
+      <div flex="25" ng-repeat="product in store.products">
+        <md-card class="tea-card">
+          <img ng-src="{{product.imageUrl}}" class="md-card-image" alt="image here">
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">{{product.name}}</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            <p><strong>Price:</strong> {{product.price / 100 | currency}}</p>
+            <p><strong>Caffeine Scale:</strong> {{product.caffeineScale}}</p>
+            <p><strong>Ingredients:</strong> {{product.ingredients}}</p>
+            <p><strong>Rating:</strong> {{product.rating}}</p>
+            <p><strong>In Stock?</strong> {{product.inStock | yesNo}}</p>
+            <!-- <p><strong>Categories:</strong>
+              <ul ng-repeat="category in product.categories">
+                <li>{{category}}</li>
               </ul>
-            </md-card-content>
-            <md-card-actions layout="row" layout-align="end center">
-              <md-button>Action 1</md-button>
-              <md-button>Action 2</md-button>
-            </md-card-actions>
-          </md-card>
-        </div>
+            </p> -->
+            <md-chips ng-model="product.categories" readonly="true">
+              <md-chip-template>{{$chip}}</md-chip-template>
+            </md-chips>
+
+          </md-card-content>
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button>Action 1</md-button>
+            <md-button>Action 2</md-button>
+          </md-card-actions>
+        </md-card>
       </md-content>
     </div>
     <!--
