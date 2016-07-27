@@ -10,20 +10,51 @@
   </head>
 
   <body  ng-controller="StoreController as store" ng-cloak="">
-    <md-toolbar>
+    <!-- <md-toolbar>
       <div class="md-toolbar-tools">
         <h2 class="md-flex">MEAN Tea Store</h2>
       </div>
+    </md-toolbar> -->
+
+    <md-toolbar class="md-hue-2">
+      <div class="md-toolbar-tools">
+        <!-- <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
+          <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+        </md-button> -->
+        <h2>
+          <span><a href="/">MEAN Tea Store</a></span>
+        </h2>
+        <span flex></span>
+        <!-- <md-button class="md-icon-button" aria-label="Favorite">
+          <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="More">
+          <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+        </md-button> -->
+        <md-input-container>
+          <!-- <label>Sort by:</label> -->
+          <md-select placeholder="Search by category" ng-model="selectedCategory" md-on-open="loadCategories()" style="min-width: 200px;">
+            <md-option ng-repeat="category in ['dark', 'cold', 'awesome', 'dry', 'hot', 'summer', 'lucid', 'warm', 'winter', 'spring']"
+                       value="{{category}}">{{category}}</md-option>
+          </md-select>
+        </md-input-container>
+
+        <input type="text" ng-model='search'>
+      </div>
     </md-toolbar>
 
-    <div layout="column" layout-align="end center" ng-controller="CategoryController">
-      <md-select placeholder="Search by category" ng-model="category" md-on-open="loadCategories()" style="min-width: 200px;">
-        <md-option ng-value="category" ng-repeat="category in categories">{{category.name}}</md-option>
-      </md-select>
+    <div layout="row" layout-align="start center">
+      <md-input-container>
+        <!-- <label>Sort by:</label> -->
+        <md-select placeholder="Sort by price" ng-model="priceSort">
+          <md-option value="price">lowest</md-option>
+          <md-option value="-price">highest</md-option>
+        </md-select>
+      </md-input-container>
     </div>
 
     <md-content class="md-padding" flex layout-wrap layout="row">
-      <div flex="25" ng-repeat="product in store.products">
+      <div flex="25" ng-repeat="product in store.products | filter: search | filter: selectedCategory | orderBy: priceSort">
         <md-card class="tea-card">
           <img ng-src="{{product.imageUrl}}" class="md-card-image" alt="image here">
           <md-card-title>
@@ -42,18 +73,75 @@
                 <li>{{category}}</li>
               </ul>
             </p> -->
+            <!-- ng-repeat does not work well with md-chip -->
             <md-chips ng-model="product.categories" readonly="true">
               <md-chip-template>{{$chip}}</md-chip-template>
             </md-chips>
 
           </md-card-content>
           <md-card-actions layout="row" layout-align="end center">
-            <md-button>Action 1</md-button>
-            <md-button>Action 2</md-button>
+            <md-input-container>
+              <!-- <label>Quantity</label> -->
+              <md-select placeholder="Quantity" ng-model="quantity">
+                <md-option ng-repeat="quantity in [2,3,4,5,6,7,8,9,10]" value="{{quantity}}">{{quantity}}</md-option>
+              </md-select>
+            </md-input-container>
+            <md-button>Add to cart</md-button>
           </md-card-actions>
         </md-card>
-      </md-content>
-    </div>
+      </div>
+    </md-content>
+
+    <h3>My Shopping Bag
+      <span class="pull-right">
+        <button type="button" class="btn btn-success" ng-click="saveBag(bag.items)">Save</button>
+        Order total: {{bag.orderTotal | currency}}
+      </span>
+    </h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <td>Product</td>
+          <td>Quantity</td>
+          <td>Sub-total</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in bag.items">
+          <td>
+            <h3>{{ item.name }}</h3>
+            <img ng-src="{{item.imageUrl}}" alt="tea picture" />
+            <span>
+              <p>
+                <strong>Caffeine Scale:</strong> {{ item.caffeineScale }}
+              </p>
+              <p>
+                <strong>Ingredients:</strong> {{ item.ingredients }}
+              </p>
+              <p>
+                <strong>Rating:</strong> {{ item.rating }}
+              </p>
+            </span>
+          </td>
+          <td>
+            <span ng-if="!bag.editing">{{item.quantity}}</span>
+            <span ng-if="bag.editing"><input type="number" min="0" ng-model="item.quantity"></span>
+          </td>
+          <td>
+              <strong>{{ (item.price/100)*item.quantity | currency }}</strong>
+          </td>
+          <td>
+            <button type="button" class="btn btn-warning" ng-click="bag.isEditing(bag.editing)">
+              <span ng-if="!bag.editing">Edit</span>
+              <span ng-if="bag.editing">Save</span>
+            </button>
+            <button type="button" class="btn btn-danger" ng-click="bag.removeItem(item)">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span class="pull-right"><button type="button">Place Order</button></span>    
+
     <!--
     Copyright 2016 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.

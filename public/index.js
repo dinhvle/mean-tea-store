@@ -11,28 +11,6 @@
     }
   });
 
-  app.controller('CategoryController', function($timeout, $scope) {
-    $scope.category = null;
-    $scope.categories = null;
-    $scope.loadCategories = function() {
-      // Use timeout to simulate a 650ms request.
-      return $timeout(function() {
-        $scope.categories =  $scope.categories || [
-          { id: 1, name: 'dark' },
-          { id: 1, name: 'cold' },
-          { id: 1, name: 'awesome' },
-          { id: 1, name: 'dry' },
-          { id: 1, name: 'hot' },
-          { id: 1, name: 'summer' },
-          { id: 1, name: 'lucid' },
-          { id: 1, name: 'warm' },
-          { id: 1, name: 'winter' },
-          { id: 1, name: 'spring' }
-        ];
-      }, 650);
-    };
-  });
-
   var teas = [
     {
       "_id": "55c8ee82152165d244b98300",
