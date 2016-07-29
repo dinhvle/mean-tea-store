@@ -1,3 +1,8 @@
 md-card-content>p {
   margin-bottom: 0;
 }
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}

@@ -9,14 +9,14 @@
     <link rel="stylesheet" href="style.css">
   </head>
 
-  <body  ng-controller="StoreController as store" ng-cloak="">
+  <body ng-controller="StoreController as store" ng-cloak="">
     <!-- <md-toolbar>
       <div class="md-toolbar-tools">
         <h2 class="md-flex">MEAN Tea Store</h2>
       </div>
     </md-toolbar> -->
 
-    <md-toolbar class="md-hue-2">
+    <md-toolbar>
       <div class="md-toolbar-tools">
         <!-- <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
           <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
@@ -43,7 +43,7 @@
       </div>
     </md-toolbar>
 
-    <div layout="row" layout-align="start center">
+    <div layout="row" layout-align="start center" layout-padding>
       <md-input-container>
         <!-- <label>Sort by:</label> -->
         <md-select placeholder="Sort by price" ng-model="priceSort">
@@ -55,7 +55,7 @@
 
     <md-content class="md-padding" flex layout-wrap layout="row">
       <div flex="25" ng-repeat="product in store.products | filter: search | filter: selectedCategory | orderBy: priceSort">
-        <md-card class="tea-card">
+        <md-card class="product-card">
           <img ng-src="{{product.imageUrl}}" class="md-card-image" alt="image here">
           <md-card-title>
             <md-card-title-text>
@@ -86,61 +86,63 @@
                 <md-option ng-repeat="quantity in [2,3,4,5,6,7,8,9,10]" value="{{quantity}}">{{quantity}}</md-option>
               </md-select>
             </md-input-container>
-            <md-button>Add to cart</md-button>
+            <md-button ng-click="store.addToCart(product, quantity)">Add to cart</md-button>
           </md-card-actions>
         </md-card>
       </div>
     </md-content>
 
-    <h3>My Shopping Bag
-      <span class="pull-right">
-        <button type="button" class="btn btn-success" ng-click="saveBag(bag.items)">Save</button>
-        Order total: {{bag.orderTotal | currency}}
-      </span>
-    </h3>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <td>Product</td>
-          <td>Quantity</td>
-          <td>Sub-total</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="item in bag.items">
-          <td>
-            <h3>{{ item.name }}</h3>
-            <img ng-src="{{item.imageUrl}}" alt="tea picture" />
-            <span>
-              <p>
-                <strong>Caffeine Scale:</strong> {{ item.caffeineScale }}
-              </p>
-              <p>
-                <strong>Ingredients:</strong> {{ item.ingredients }}
-              </p>
-              <p>
-                <strong>Rating:</strong> {{ item.rating }}
-              </p>
-            </span>
-          </td>
-          <td>
-            <span ng-if="!bag.editing">{{item.quantity}}</span>
-            <span ng-if="bag.editing"><input type="number" min="0" ng-model="item.quantity"></span>
-          </td>
-          <td>
+    <md-content layout-padding>
+      <h3>My Shopping Cart
+        <span class="pull-right">
+          <md-button ng-click="saveBag(bag.items)">Save</md-button>
+          Order total: {{bag.orderTotal | currency}}
+        </span>
+      </h3>
+      <table>
+        <thead>
+          <tr>
+            <td>Product</td>
+            <td>Quantity</td>
+            <td>Sub-total</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in store.userCart">
+            <td>
+              <h3>{{ item.name }}</h3>
+              <img ng-src="{{item.imageUrl}}" alt="tea picture" />
+              <span>
+                <p>
+                  <strong>Caffeine Scale:</strong> {{ item.caffeineScale }}
+                </p>
+                <p>
+                  <strong>Ingredients:</strong> {{ item.ingredients }}
+                </p>
+                <p>
+                  <strong>Rating:</strong> {{ item.rating }}
+                </p>
+              </span>
+            </td>
+            <td>
+              <span ng-if="!bag.editing">{{item.quantity}}</span>
+              <span ng-if="bag.editing"><input type="number" min="0" ng-model="item.quantity"></span>
+            </td>
+            <td>
               <strong>{{ (item.price/100)*item.quantity | currency }}</strong>
-          </td>
-          <td>
-            <button type="button" class="btn btn-warning" ng-click="bag.isEditing(bag.editing)">
-              <span ng-if="!bag.editing">Edit</span>
-              <span ng-if="bag.editing">Save</span>
-            </button>
-            <button type="button" class="btn btn-danger" ng-click="bag.removeItem(item)">Remove</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <span class="pull-right"><button type="button">Place Order</button></span>
+            </td>
+            <td>
+              <button type="button" class="btn btn-warning" ng-click="bag.isEditing(bag.editing)">
+                <span ng-if="!bag.editing">Edit</span>
+                <span ng-if="bag.editing">Save</span>
+              </button>
+              <button type="button" class="btn btn-danger" ng-click="bag.removeItem(item)">Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span class="pull-right"><button type="button">Place Order</button></span>
+    </md-content>
 
     <!--
     Copyright 2016 Google Inc. All Rights Reserved.

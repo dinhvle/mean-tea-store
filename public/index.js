@@ -1,16 +1,42 @@
 (function() {
   var app = angular.module('TeaStore', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
 
+  // turn on for hard-coded dummy data
   // app.controller('StoreController', function() {
   //   this.products = teas;
   // });
 
-  app.controller('StoreController', function($scope, $http) {
+  app.controller('StoreController', function($http) {
     var vm = this;
+
     $http.get('/api/teas').then(function(response) {
       vm.products = response.data;
-      console.log(response);
     });
+
+    vm.userCart = [];
+
+    vm.addToCart = function(product, qty) {
+      var duplicateProducts = 0;
+
+      if(qty === undefined) {
+        qty = 1;
+      };
+
+      vm.userCart.forEach(function(eachProduct) {
+        if (eachProduct._id === product._id) {
+          duplicateProducts += 1;
+        };
+      });
+
+      product.quantity = qty;
+
+      if (duplicateProducts === 0) {
+        vm.userCart.push(product);
+      };
+      console.log(this.userCart);
+
+    };
+
   });
 
   app.filter('yesNo', function() {

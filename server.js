@@ -31,6 +31,10 @@ var Tea = mongoose.model('Tea', {
   imageUrl: String
 });
 
+var Cart = mongoose.model('Cart', {
+  items: []
+});
+
 // routes ======================================================================
   // api ---------------------------------------------------------------------
   // get all teas
@@ -46,7 +50,7 @@ var Tea = mongoose.model('Tea', {
 
   // create tea
   app.post('/api/teas', function(req, res) {
-    var newTea = db.Tea.create(req.body,function(err){
+    var newTea = Tea.create(req.body,function(err){
       if (err) {
         return res.send(err)
       }
@@ -56,14 +60,14 @@ var Tea = mongoose.model('Tea', {
 
   // read, update and delete tea
   app.get('/api/teas/:_id', function(req, res) {
-    db.Tea.findById(req.params,function(err,tea){
+    Tea.findById(req.params,function(err,tea){
       if (err) res.send(err);
       res.json(tea);
     });
   });
 
   app.put('/api/teas/:_id', function(req, res) {
-    db.Tea.findById(req.params,function(err,tea){
+    Tea.findById(req.params,function(err,tea){
 
       if (err) res.send(err);
 
@@ -83,7 +87,7 @@ var Tea = mongoose.model('Tea', {
   });
 
   app.delete('/api/teas/:_id', function(req, res) {
-    db.Tea.remove({_id:req.params._id}, function(err,tea){
+    Tea.remove({_id:req.params._id}, function(err,tea){
       if (err) return res.send(err);
       res.json({ message: 'Tea successfully deleted' });
     });
