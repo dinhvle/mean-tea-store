@@ -1,8 +1,16 @@
 (function() {
   var app = angular.module('TeaStore', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
 
-  app.controller('StoreController', function() {
-    this.products = teas;
+  // app.controller('StoreController', function() {
+  //   this.products = teas;
+  // });
+
+  app.controller('StoreController', function($scope, $http) {
+    var vm = this;
+    $http.get('/api/teas').then(function(response) {
+      vm.products = response.data;
+      console.log(response);
+    });
   });
 
   app.filter('yesNo', function() {

@@ -34,7 +34,7 @@
         <md-input-container>
           <!-- <label>Sort by:</label> -->
           <md-select placeholder="Search by category" ng-model="selectedCategory" md-on-open="loadCategories()" style="min-width: 200px;">
-            <md-option ng-repeat="category in ['dark', 'cold', 'awesome', 'dry', 'hot', 'summer', 'lucid', 'warm', 'winter', 'spring']"
+            <md-option ng-repeat="category in ['dark', 'light', 'cold', 'awesome', 'dry', 'hot', 'summer', 'lucid', 'warm', 'winter', 'spring']"
                        value="{{category}}">{{category}}</md-option>
           </md-select>
         </md-input-container>
@@ -140,7 +140,7 @@
         </tr>
       </tbody>
     </table>
-    <span class="pull-right"><button type="button">Place Order</button></span>    
+    <span class="pull-right"><button type="button">Place Order</button></span>
 
     <!--
     Copyright 2016 Google Inc. All Rights Reserved.
